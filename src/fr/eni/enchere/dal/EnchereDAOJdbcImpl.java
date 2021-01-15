@@ -16,10 +16,10 @@ import fr.eni.enchere.bo.Utilisateur;
 
 public class EnchereDAOJdbcImpl implements EnchereDAO{
 
-	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERES (montant, idArticle, idUser) VALUES (?,?,?)";
+	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERES (montant, idArticle, idUserEnchere) VALUES (?,?,?)";
 	private static final String GET_ALL_ENCHERE = "SELECT * FROM ENCHERES ";
 	private static final String DELETE_ENCHERE = "DELETE FROM ENCHERES WHERE idArticle = ?";
-	private static final String UPDATE_ENCHERE = "UPDATE ENCHERES SET idUser = ?, montant= ?, date = ? WHERE idArticle =?";
+	private static final String UPDATE_ENCHERE = "UPDATE ENCHERES SET idUserEnchere = ?, montant= ?, date = ? WHERE idArticle =?";
 	
 	@Override
 	public void insertEnchere(Enchere enchere) {
