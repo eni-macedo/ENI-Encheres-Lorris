@@ -1,6 +1,6 @@
 package fr.eni.enchere.bo;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.util.Date;
 
 public class Article {
@@ -18,6 +18,7 @@ public class Article {
 	Utilisateur utilisateur;
 	Categories categorie;
 	Retrait retrait;
+	Enchere enchere;
 	
 	
 	
@@ -86,6 +87,32 @@ public class Article {
 		this.dateFinEnchere = dateFinEnchere;
 		this.miseAPrix = miseAPrix;
 		this.prixVente = prixVente;
+	}
+
+
+	
+
+
+
+
+	public Article(int idArticle, int idUser, int idRetrait, String nomArticle, String descriptionArticle,
+			int idCategorie, LocalDate dateDebutEnchere, LocalDate dateFinEnchere, int miseAPrix, int prixVente,
+			Utilisateur utilisateur, Categories categorie, Retrait retrait, Enchere enchere) {
+		super();
+		this.idArticle = idArticle;
+		this.idUser = idUser;
+		this.idRetrait = idRetrait;
+		this.nomArticle = nomArticle;
+		this.descriptionArticle = descriptionArticle;
+		this.idCategorie = idCategorie;
+		this.dateDebutEnchere = dateDebutEnchere;
+		this.dateFinEnchere = dateFinEnchere;
+		this.miseAPrix = miseAPrix;
+		this.prixVente = prixVente;
+		this.utilisateur = utilisateur;
+		this.categorie = categorie;
+		this.retrait = retrait;
+		this.enchere = enchere;
 	}
 
 
@@ -327,15 +354,39 @@ public class Article {
 
 
 
+	public Enchere getEnchere() {
+		return enchere;
+	}
+
+
+
+
+
+
+	public void setEnchere(Enchere enchere) {
+		this.enchere = enchere;
+	}
+
+
+
+
+
+
 	@Override
 	public String toString() {
 		return "Article [idArticle=" + idArticle + ", idUser=" + idUser + ", idRetrait=" + idRetrait + ", nomArticle="
 				+ nomArticle + ", descriptionArticle=" + descriptionArticle + ", idCategorie=" + idCategorie
 				+ ", dateDebutEnchere=" + dateDebutEnchere + ", dateFinEnchere=" + dateFinEnchere + ", miseAPrix="
 				+ miseAPrix + ", prixVente=" + prixVente + ", utilisateur=" + utilisateur + ", categorie=" + categorie
-				+ ", retrait=" + retrait + "]";
+				+ ", retrait=" + retrait + ", enchere=" + enchere + "]";
 	}
 
+
+
+
+
+
+	
 
 
 

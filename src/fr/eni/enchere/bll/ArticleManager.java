@@ -141,8 +141,8 @@ System.out.println("ArticleManager REsultat: "+ resultat);
 public Article selectArticleById(int idArticle) {
 	Article article = new Article();
 	article = articleDAO.getArticleById(idArticle);
-	//System.out.println("*********Article MANAGER ARTICLE BY ID");
-	//System.out.println("Article "+ idArticle +" "+ article.toString());
+	System.out.println("*********Article MANAGER ARTICLE BY ID");
+	System.out.println("Article "+ idArticle +" "+ article.toString());
 	
 	return article;
 }
@@ -183,7 +183,7 @@ public List<Article> listeArticlesPourTriBouton(String bouton, Utilisateur utili
 	List<Article> listeArticlesATrier = new ArrayList<Article>();
 		listeArticlesATrier = this.articleDAO.getListeArticlesPourTri();
 	System.out.println("***********ARTICLE MANAGER listeArticlePourTri****************");
-	System.out.println("listeArticles pour tri boutons "+ listeArticlesATrier.toString());
+	System.out.println("listeArticles pour tri boutons avant tri"+ listeArticlesATrier.toString());
 	//ventes en cours = listeArticle-article.idUSER de utilisateur session
 	//ventes non débutées = listeArticle avec articles qui correspondent à article.idUSer et date_debut>NOW
 	//ventes terminées = listeArticle avec idUSer userSession dateFinEnchere<now
@@ -191,17 +191,17 @@ public List<Article> listeArticlesPourTriBouton(String bouton, Utilisateur utili
 		if (bouton.equals("ventesEnCours")) {
 			System.out.println("vente en cours");
 				for (Article a : listeArticlesATrier) {
-					if (utilisateurSession.getNoUtilisateur() == a.getIdUser()) {
+					if ((utilisateurSession.getNoUtilisateur() == a.getIdUser()) && (a.getDateDebutEnchere().compareTo(LocalDate.now())<1) && (a.getDateFinEnchere().compareTo(LocalDate.now())>1)) {
 						listeArticlesTriee.add(a);
 					}
 				}
 					
 		} else if (bouton.equals("nonDebutees")) {
 				for (Article a : listeArticlesATrier) {
-					if(utilisateurSession.getNoUtilisateur() == a.getIdUser() ) {
-						if((a.getDateDebutEnchere().compareTo(LocalDate.now()))>1) {
+					if(utilisateurSession.getNoUtilisateur() == a.getIdUser() && (a.getDateDebutEnchere().compareTo(LocalDate.now())>1) ) {
+						
 						listeArticlesTriee.add(a);
-							}
+							
 						}
 					}
 				} else if (bouton.equals("terminees")) {
@@ -225,7 +225,7 @@ public List<Article> filtreArticles(int idCat, String filtre, List<Article> list
 		List<Article> listeAEnvoyer = new ArrayList<Article>();
 		System.out.println("article MANAGER filtreArticles");
 		System.out.println("idCAT "+ idCat + " filtre " + filtre);
-		System.out.println("liste ArticlesTries" + listeArticlesTries.toString());
+		//System.out.println("liste ArticlesTries" + listeArticlesTries.toString());
 		if (idCat != 0 && filtre != null || filtre != "") {
 			System.out.println("1ere boucle id cat !0 filtre !null" );
 			if (idCat!=0 && filtre == null || filtre =="") {
@@ -313,6 +313,7 @@ public List<Article> listeTousLesArticlesConnection(Utilisateur utilisateur) {
 listeArticles = articleDAO.getAllArticles();
 //System.out.println((listeArticles.toString()));
 	for (Article a :listeArticles) {
+		System.out.println("a.getUser " + a.getIdUser()+ " No User "+ utilisateur.getNoUtilisateur());
 	if (a.getIdUser() != utilisateur.getNoUtilisateur()) {
 		listeArticlesConnection.add(a);
 	}
@@ -332,6 +333,17 @@ listeArticles = articleDAO.getAllArticles();
 public void updatePrixArticle(int idArticle, int prixVente) {
 	
 	articleDAO.updateEnchereArticle(idArticle, prixVente);
+	
+}
+
+
+
+public List<Article> getListeVentesOuvertes() {
+	List<Article> listeVentesOuvertes = new ArrayList<Article>();
+	listeVentesOuvertes = articleDAO.getListeVentesOuvertes();
+	
+	return listeVentesOuvertes;
+	
 	
 }
 

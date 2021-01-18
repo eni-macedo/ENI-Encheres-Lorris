@@ -16,5 +16,6 @@ public interface ArticleDAO {
 	public Enchere getEnchereByArticle(int idArticle);
 	public void updateEnchereArticle(int idArticle, int prixVente);
 	public List<Article> getListeArticlesPourTri();
+	public List<Article> getListeVentesOuvertes();
 
 }

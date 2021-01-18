@@ -1,6 +1,6 @@
 package fr.eni.enchere.servlets;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
 import fr.eni.enchere.bll.ArticleManager;
+import fr.eni.enchere.bll.UtilisateurManager;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Categories;
 import fr.eni.enchere.bo.Utilisateur;
@@ -27,12 +28,23 @@ import fr.eni.enchere.bo.Utilisateur;
 public class ServletAccueilSession extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ServletAccueilSession() {
-        super();
-        // TODO Auto-generated constructor stub
+    @Override
+    public void init() throws ServletException {
+    	// TODO Auto-generated method stub
+    	UtilisateurManager utilisateurManager = new UtilisateurManager();
+		List<Utilisateur> listeIdPseudo = new ArrayList<Utilisateur>();
+		listeIdPseudo = utilisateurManager.getlisteIdPseudo();
+		System.out.println("liste "+ listeIdPseudo);
+		ServletContext servletContext;
+		this.getServletContext().setAttribute("listeIdPseudo", listeIdPseudo);
+		
+    	
+		
+		
+		//getServletContext().setAttribute("listeIdPseudo", "listeIdPseudo");
+    	
+    	
+    	super.init();
     }
 
 	/**
@@ -45,26 +57,21 @@ public class ServletAccueilSession extends HttpServlet {
 		
 		ArticleManager articleManager = new ArticleManager();
 		List<Article> listeArticlesConnection = new ArrayList<Article>();
-		//System.out.println("SERVELT ACCUEIL CONNEXION");
-		//System.out.println("UserSession "+ utilisateurSession.toString());
-		
 		listeArticlesConnection = articleManager.listeTousLesArticlesConnection(utilisateurSession);
-		//System.out.println("ServletAccueil ListeArticle = "+ listeArticlesConnection.toString());
 		request.setAttribute("listeArticles", listeArticlesConnection);
 		
-		Categories categorie = new Categories();
-		List<Categories> listeCategories = new ArrayList<>();
+		//Categories categorie = new Categories();
+		//List<Categories> listeCategories = new ArrayList<>();
 		
-		ArticleManager articleManagerCat = new ArticleManager();
-		listeCategories = articleManagerCat.selectLibelleCategorie();
-		request.setAttribute("listeCategories", listeCategories);
+		//ArticleManager articleManagerCat = new ArticleManager();
+		//listeCategories = articleManagerCat.selectLibelleCategorie();
+		//request.setAttribute("listeCategories", listeCategories);
 		
 		System.out.println("**********SERVLET ACCUEIL SESSION****");
-		//System.out.println(listeCategories.toString());
 		System.out.println("Credit USERSESSION" + utilisateurSession.getCredit());
 	
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/restreint/accueilSession.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/restreint/accueilSession.jsp");
 		rd.forward(request, response);
 	}
 

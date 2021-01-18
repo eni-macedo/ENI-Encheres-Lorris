@@ -17,5 +17,6 @@ public interface EnchereDAO {
 	public void deleteEnchere( int idArticle);
 	public void updateEnchere(int idArticle, int idUserSession, int montant, LocalDate date);
 	public List<Enchere> getListeEncheresPourTri();
-
+	public List<Article> getOuvert();
+	
 }

@@ -21,17 +21,32 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 	private static final String INSERT_RETRAIT = "INSERT INTO RETRAITS (rue, code_postal, ville) VALUES (?,?,?)";
 	private static final String GET_CATEGORIE = "SELECT * FROM CATEGORIES";
 	private static final String SELECT_ARTICLES_EN_VENTE = "SELECT u.idUser, u.pseudo, u.nom nomUser, u.prenom, u.email, u.telephone, u.rue rueUser, u.code_postal CPUser, u.ville villeUser," +
-									" a.idArticle, a.nom, a.description, a.date_debut, a.date_fin, a.prix_vente, a.idCategorie, r.rue, r.code_postal, r.ville" +
-									" FROM ARTICLES a INNER JOIN  RETRAITS r ON a.idRetrait=r.idRetrait INNER JOIN USERS u ON u.idUser=a.idUserArticle";
-	private static final String SELECT_ENCHERE_BY_ARTICLE = "SELECT e.idUser,e.date, e.MAX(montant), u.pseudo" +
+									" a.idArticle, a.nom, a.description, a.date_debut, a.date_fin, a.prix_vente, a.idCategorie, r.rue, r.code_postal, r.ville, c.idCategorie, c.libelle" +
+									" FROM ARTICLES a INNER JOIN  RETRAITS r ON a.idRetrait=r.idRetrait INNER JOIN USERS u ON u.idUser=a.idUserArticle INNER JOIN CATEGORIES c ON a.idCategorie = c.idCategorie";
+	private static final String SELECT_ENCHERE_BY_ARTICLE = "SELECT e.idUserEnchere,e.date, e.MAX(montant), u.pseudo" +
 															"FROM ENCHERES e  INNER JOIN ON USERS u WHERE u.idUser = e.idUserEnchere"+
 															"AND idArticle = ? ";
-	private static final String GET_ARTICLE_BY_ID = "SELECT a.idArticle, a.nom, a.description, c.libelle, a.prix_vente, a.prix_initial, a.date_fin, r.rue, r.code_postal, r.ville, a.idUserArticle, u.pseudo FROM ARTICLES a INNER JOIN  RETRAITS r ON r.idRetrait = a.idRetrait INNER JOIN  CATEGORIES c ON c.idCategorie = a.idCategorie INNER JOIN USERS u ON u.idUser = a.idUser WHERE idArticle = ?";
+	private static final String GET_ARTICLE_BY_ID = "SELECT a.idArticle, a.nom, a.description, a.idCategorie, c.libelle, a.prix_vente, a.prix_initial, a.date_debut, a.date_fin,"+
+															"r.rue, r.code_postal, r.ville, a.idUserArticle, u.pseudo, u.telephone, "+
+															"e.idUserEnchere "+	
+															"FROM ARTICLES a INNER JOIN  RETRAITS r ON r.idRetrait = a.idRetrait "+
+															"INNER JOIN  CATEGORIES c ON c.idCategorie = a.idCategorie "+
+															"INNER JOIN USERS u ON u.idUser = a.idUserArticle "+
+															"FULL JOIN ENCHERES e ON e.idArticle = a.idArticle WHERE a.idArticle = ?";
 	private static final String UPDATE_ENCHERE_ARTICLE = "UPDATE ARTICLES SET prix_vente = ? WHERE idArticle = ?";
-	private static final String GET_LISTEARTICLES_POUR_TRI="SELECT a.idArticle, a.nom, a.prix_vente, a.date_debut, a.date_fin, a.idUserArticle, a.idCategorie, u.idUser, u.pseudo\r\n" + 
+	private static final String GET_LISTEARTICLES_POUR_TRI="SELECT a.idArticle, a.nom, a.prix_vente, a.date_debut, a.date_fin, a.idUserArticle, a.idCategorie, u.idUser, u.pseudo" + 
 			"		FROM ARTICLES a INNER JOIN USERS u ON a.idUSerArticle = u.idUser";
+	private static final String LISTE_VENTES_OUVERTES = "SELECT a.idArticle, a.nom, a.description, a.date_debut, a.date_fin, a.prix_vente," +
+															"a.idUserArticle, u.pseudo, u.telephone, c.libelle, e.idUserEnchere "+
+															"FROM ARTICLES a LEFT JOIN USERS u ON a.idUserArticle = u.idUser "	+
+															"INNER JOIN CATEGORIES c ON  a.idCategorie = c.idCategorie "+
+															"FULL JOIN ENCHERES e ON a.idArticle = e.idArticle ";
+															
+															
+															
+														//	"WHERE a.date_debut < GETDATE() AND a.date_fin > GETDATE()";
 			
-			
+			//\r\n
 		@Override
 	
 	
@@ -91,14 +106,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 	}
 
 	@Override
-	//"SELECT u.pseudo, u.nom, u.prenom, u.email, u.telephone, u.rue, u.code_postal, u.ville," +
-	//" a.idArticle, a.nom, a.description, a.date_debut, a.date_fin, a.prix_vente, a.idCategorie, r.rue, r.code_postal, r.ville" +
-	//" FROM ARTICLES a INNER JOIN  RETRAITS r ON a.idRetrait=r.idRetrait INNER JOIN USERS u ON u.idUser=a.idUser";
+	
 	public List<Article> getAllArticles() {
 		List<Article> listeArticles = new ArrayList<>();
 		Utilisateur utilisateur;
 		Article article;
 		Retrait retrait;
+		Categories categorie;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement rqt = cnx.prepareStatement(SELECT_ARTICLES_EN_VENTE);
 			ResultSet rs = rqt.executeQuery();
@@ -133,8 +147,14 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 				retrait.setCodePostal(rs.getString("code_postal"));
 				retrait.setVille(rs.getString("ville"));
 				
+				categorie = new Categories();
+				categorie.setIdCategorie(rs.getInt("idCategorie"));
+				categorie.setLibelle(rs.getString("libelle"));
+				
+				
 				article.setUtilisateur(utilisateur);
 				article.setRetrait(retrait);
+				article.setCategorie(categorie);
 				
 				listeArticles.add(article);
 				
@@ -157,20 +177,21 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 	//*********************ARTICLE BY ID**********************
 	@Override
 	/*
-	 * SELECT a.idArticle, a.nom, a.description, c.libelle, a.prix_vente, a.prix_initial, a.date_fin, r.rue, r.code_postal, r.ville, a.idUser, u.pseudo"+
-	/*
+	"SELECT a.idArticle, a.nom, a.description, c.libelle, a.prix_vente, a.prix_initial, a.date_debut, a.date_fin,"+
+	"r.rue, r.code_postal, r.ville, a.idUserArticle, u.pseudo, u.telephone, "+
+	"e.idUserEnchere"+	
 	"FROM ARTICLES a INNER JOIN  RETRAITS r ON r.idRetrait = a.idRetrait"+
-					"INNER JOIN  CATEGORIES c ON c.idCategorie = a.idCategorie"+
-					"INNER JOIN USERS u ON u.idUser = a.idUser"+
-					"WHERE idArticle = ?";
-					*/
-
+	"INNER JOIN  CATEGORIES c ON c.idCategorie = a.idCategorie"+
+	"INNER JOIN USERS u ON u.idUser = a.idUserArticle"+
+	"INNER JOIN ENCHERES e ON e.idArticle = a.idArticle WHERE idArticle = ?";
+	*/
 
 	public Article getArticleById(int id) {
 		Article article = new Article();
 		Retrait retrait = new Retrait();
 		Categories categorie = new Categories();
 		Utilisateur utilisateur = new Utilisateur();
+		Enchere enchere = new Enchere();
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement rqt = cnx.prepareStatement(GET_ARTICLE_BY_ID);
 			rqt.setInt(1, id);
@@ -183,13 +204,18 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 				utilisateur= new Utilisateur();
 				retrait=new Retrait();
 				categorie = new Categories();
+				enchere = new Enchere();
+				
+				enchere.setNoUtilisateur(rs.getInt("idUserEnchere"));
 				
 				article = new Article();
 				article.setIdArticle(rs.getInt("idArticle"));
+				article.setIdCategorie(rs.getInt("idCategorie"));
 				article.setNomArticle(rs.getString("nom"));
 				article.setDescriptionArticle(rs.getString("description"));
 				article.setMiseAPrix(rs.getInt("prix_initial"));
 				article.setPrixVente(rs.getInt("prix_vente"));
+				article.setDateDebutEnchere(rs.getDate("date_debut").toLocalDate());
 				article.setDateFinEnchere(rs.getDate("date_fin").toLocalDate());
 				article.setMiseAPrix(rs.getInt("prix_initial"));
 				
@@ -199,12 +225,15 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 				retrait.setVille(rs.getString("ville"));
 				
 				utilisateur.setPseudo(rs.getString("pseudo"));
+				utilisateur.setTelephone(rs.getString("telephone"));
 				categorie.setLibelle(rs.getString("libelle"));
 				
+				enchere.setNoUtilisateur(rs.getInt("idUserEnchere"));
 				
 				article.setUtilisateur(utilisateur);
 				article.setRetrait(retrait);
 				article.setCategorie(categorie);
+				article.setEnchere(enchere);
 			
 				
 				
@@ -217,7 +246,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		System.out.println("article "+id+ " " +article.toString());
 		return article;
 	}
 
@@ -303,7 +332,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 				article.setDateDebutEnchere(rs.getDate("date_debut").toLocalDate());
 				article.setDateFinEnchere(rs.getDate("date_fin").toLocalDate());
 				article.setPrixVente(rs.getInt("prix_vente"));
-				article.setIdUser(rs.getInt("idUser"));
+				article.setIdUser(rs.getInt("idUserArticle"));
 				
 				Utilisateur utilisateur = new Utilisateur();
 				utilisateur.setNoUtilisateur(rs.getInt("idUser"));
@@ -328,6 +357,73 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 		
 		
 		return listeArticlesPourTri;
+	}
+
+	//  SELECT a.idArticle, a.nom, a.description, a.date_debut, a.date_fin, a.prix_vente,
+	//a.idUserArticle, u.pseudo, u.telephone
+	//FROM ARTICLES a LEFT JOIN USERS u ON a.idUserArticle = u.idUser 
+	@Override
+	public List<Article> getListeVentesOuvertes() {
+		System.out.println("*****************ARTICLE JDBC*************");
+		List<Article> listeVentesOuvertes = new ArrayList<Article>();
+		
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement rqt = cnx.prepareStatement(LISTE_VENTES_OUVERTES);
+			ResultSet rs = rqt.executeQuery();
+			
+			while (rs.next()) {
+				Article article = new Article();
+				article.setIdArticle(rs.getInt("idArticle"));
+				article.setNomArticle(rs.getString("nom"));
+				article.setDescriptionArticle(rs.getString("description"));
+				article.setDateDebutEnchere(rs.getDate("date_debut").toLocalDate());
+				article.setDateFinEnchere(rs.getDate("date_fin").toLocalDate());
+				article.setPrixVente(rs.getInt("prix_vente"));
+				article.setIdUser(rs.getInt("idUserArticle"));
+				
+				Utilisateur utilisateur = new Utilisateur();
+				utilisateur.setPseudo(rs.getString("pseudo"));
+				utilisateur.setTelephone(rs.getString("telephone"));
+				
+				Categories categorie = new Categories();
+				categorie.setLibelle(rs.getString("libelle"));
+				
+				Enchere enchere = new Enchere();
+				
+				Integer idUserEnchere = rs.getInt("idUserEnchere");
+				if (idUserEnchere != null) {
+					enchere.setNoUtilisateur(rs.getInt("idUSerEnchere"));
+					
+										
+				} else {
+					
+					enchere.setNoUtilisateur(0);
+				}
+				
+				//enchere.setNoUtilisateur(rs.getInt("idUserEnchere"));
+
+				article.setUtilisateur(utilisateur);
+				article.setCategorie(categorie);
+				
+				article.setEnchere(enchere);
+				
+				listeVentesOuvertes.add(article);
+				
+				
+				
+				
+				
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return listeVentesOuvertes;
 	}
 	
 	

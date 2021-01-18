@@ -61,7 +61,7 @@ public class ServletGestionProfil extends HttpServlet {
 			System.out.println("****utilisateur =" + utilisateur.toString());
 			System.out.println("*******************");
 			request.setAttribute("utilisateur", utilisateur);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/restreint/MonProfil.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/restreint/MonProfil.jsp");
 			rd.forward(request, response);
 			
 		} else if (request.getServletPath().contentEquals("/Delete")) {
@@ -92,7 +92,7 @@ public class ServletGestionProfil extends HttpServlet {
 			System.out.println("****utilisateur =" + utilisateur.toString());
 			System.out.println("*******************");
 			request.setAttribute("utilisateur", utilisateur);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/restreint/profilUser.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/restreint/profilUser.jsp");
 			rd.forward(request, response);
 		}
 		

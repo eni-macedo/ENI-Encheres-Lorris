@@ -8,8 +8,17 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
-    <welcome-file>Accueil</welcome-file>
   </welcome-file-list>
+  
+  
+  <filter>
+	<filter-name>FilterConnexion</filter-name>
+	<filter-class>fr.eni.enchere.filter.FilterConnexion</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>FilterConnexion</filter-name>
+	<url-pattern>/restreint/*</url-pattern>
+</filter-mapping>
   
 <!-- <jsp-config>
   	<jsp-property-group>

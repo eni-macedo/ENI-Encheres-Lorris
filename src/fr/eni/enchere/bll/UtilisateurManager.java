@@ -45,11 +45,14 @@ public class UtilisateurManager {
 	}
 	
 	
-	private UtilisateurDAO utilisateurDAO;
+	private UtilisateurDAO utilisateurDAO;//interface
 	
 	public UtilisateurManager() {
 		this.utilisateurDAO = DAOFactory.getUtilisateurDAO();
 	}
+	
+	
+	
 	
 	
 	public List<String> getListeEmail() {
@@ -69,6 +72,14 @@ public class UtilisateurManager {
 		listePseudo = this.utilisateurDAO.getListePseudo();
 		
 		return listePseudo;
+		
+	}
+	
+	
+	public List<Utilisateur> getlisteIdPseudo() {
+		List<Utilisateur> listeIdPseudo = new ArrayList<Utilisateur>();
+		listeIdPseudo = this.utilisateurDAO.getListeIdPseudo();
+		return listeIdPseudo;
 		
 	}
 	
@@ -184,11 +195,11 @@ public class UtilisateurManager {
 			
 			
 			if (erreurs.isEmpty()) {
-				resultat = "Mise ï¿½ jour OK";
+				resultat = "Mise à jour OK";
 				utilisateurDAO.updateProfil(utilisateur);
 			} else {
 				
-				resultat = "Echec Mise ï¿½ jour";
+				resultat = "Echec Mise à jour";
 			}
 			System.out.println("********utilisateurManager***********");
 			System.out.println("resultat = " + resultat);
@@ -201,6 +212,9 @@ public class UtilisateurManager {
 		
 		return utilisateur;
 		}
+		
+	
+	
 	
 	public Utilisateur RecupUtilisateurRequete(HttpServletRequest request) {
 		Utilisateur utilisateur = new Utilisateur();
@@ -421,7 +435,7 @@ private void validationEmailConnexion(String email) throws Exception{
 		} else {
 			if (retourEmail == null) {
 				
-				throw new Exception("Pas de compte associï¿½");
+				throw new Exception("Pas de compte associé");
 			}
 			
 			
@@ -448,7 +462,7 @@ private void validationEmailConnexion(String email) throws Exception{
 				
 			for (String emailBDD: listeEmails) {
 				if (email.equals(emailBDD)) {
-					throw new Exception("Email dï¿½jï¿½ utilisï¿½");
+					throw new Exception("Email déjà utilisé");
 				}
 				
 			}
@@ -476,7 +490,7 @@ private void validationEmailConnexion(String email) throws Exception{
 				
 			for (String emailBDD: listeEmails) {
 				if (email.equals(emailBDD)) {
-					throw new Exception("Email dï¿½jï¿½ utilisï¿½");
+					throw new Exception("Email déjà utilisé");
 				}
 				
 			}
@@ -493,9 +507,9 @@ private void validationEmailConnexion(String email) throws Exception{
 		 if (motDePasse !=null && confirmation != null) {
 			 
 			 if(!motDePasse.contentEquals(confirmation)) {
-				 throw new Exception("Mots de passe diffï¿½rents");
+				 throw new Exception("Mots de passe différents");
 			 } else if (motDePasse.length()<4) {
-				 throw new Exception("Mot de passe supï¿½rieur ï¿½ 4 car");
+				 throw new Exception("Mot de passe supérieur à 4 car");
 			 }
 		 } else {
 			 throw new Exception ("Merci de saisir un mot de passe");
@@ -509,9 +523,9 @@ private void validationEmailConnexion(String email) throws Exception{
 			 
 						 
 			 if(!newMotDePasse.contentEquals(confirmation)) {
-				 throw new Exception("Mots de passe diffï¿½rents");
+				 throw new Exception("Mots de passe différents");
 			 } else if (newMotDePasse.length()<4) {
-				 throw new Exception("Mot de passe supï¿½rieur ï¿½ 4 car");
+				 throw new Exception("Mot de passe supérieur à 4 car");
 			 } motDePasse = newMotDePasse;
 			 
 		 } 
@@ -531,7 +545,7 @@ private void validationEmailConnexion(String email) throws Exception{
 			for (String pseudoBDD : listePseudo) {
 				if (pseudo.equals(pseudoBDD)) {
 					
-					throw new Exception("Pseudo dï¿½jï¿½ utilisï¿½");
+					throw new Exception("Pseudo déjà utilisé");
 				}
 				
 			}
@@ -556,7 +570,7 @@ private void validationEmailConnexion(String email) throws Exception{
 			for (String pseudoBDD : listePseudo) {
 				if (pseudo.equals(pseudoBDD)) {
 					
-					throw new Exception("Pseudo dï¿½jï¿½ utilisï¿½");
+					throw new Exception("Pseudo déjà utilisé");
 				}
 				
 			}
@@ -568,7 +582,7 @@ private void validationEmailConnexion(String email) throws Exception{
 private void validationPrenom(String prenom) throws Exception {
 		
 		if (prenom == null || prenom =="" ) {
-			throw new Exception("Saisir un prï¿½nom");
+			throw new Exception("Saisir un prénom");
 		}
 	}
 

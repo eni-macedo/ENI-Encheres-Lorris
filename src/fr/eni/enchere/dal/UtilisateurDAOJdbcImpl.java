@@ -19,7 +19,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO{
 	private static final String UPDATE = "UPDATE USERS SET pseudo=?, nom=?, prenom=?, email=?, telephone=?, rue=?, code_postal=?,ville=?, mot_de_passe=? WHERE idUser=?";
 	private static final String DELETE_USER = "DELETE FROM USERS WHERE idUser=?";
 	private static final String UPDATE_CREDIT = "UPDATE USERS SET credit=? WHERE idUser = ?";
-	
+	private static final String GET_LIST_IDPSEUDO = "SELECT idUser, pseudo FROM USERS";
 	
 	@Override
 	
@@ -230,6 +230,28 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO{
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public List<Utilisateur> getListeIdPseudo() {
+		List<Utilisateur> listeIdPseudo = new ArrayList<Utilisateur>();
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement rqt = cnx.prepareStatement(GET_LIST_IDPSEUDO);
+			ResultSet rs = rqt.executeQuery();
+			
+			while(rs.next()) {
+				Utilisateur utilisateur = new Utilisateur(rs.getInt("idUser"),rs.getString("pseudo"));
+				
+				
+				listeIdPseudo.add(utilisateur);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		return listeIdPseudo;
 	} 
 
 }
