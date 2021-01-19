@@ -21,8 +21,7 @@
     <div class="container">
         <div class="row">
              <div class="col-sm-12">
-             								      <!-- /rien pour retour à l'accueil -->
-                <a href="<%=request.getContextPath() %> "><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
+             <a href="<%=request.getContextPath() %>/"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
            	 </div> 
        	</div>
     </div>
@@ -43,7 +42,7 @@
 	        <div class="row" style="justify-content:center;">
 		        <div class="connexion">
 					<div align="center">
-						<a href="<%=request.getContextPath() %>/AccueilSession"><input type="submit" value="Connexion" class="btn btn-outline-primary btn-lg" style="margin-top: 20px; margin-right: 35%"/></a>
+						<a href="AccueilSession"><input type="submit" value="Connexion" class="btn btn-outline-primary btn-lg" style="margin-top: 20px; margin-right: 35%"/></a>
 					</div>
 					<div align="center" style="margin-top: -45px;">
 						<input style=" margin-left: 30px" type="checkbox" id="souvenir" name="souvenir" value="oui"/>

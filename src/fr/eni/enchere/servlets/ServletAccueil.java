@@ -25,7 +25,7 @@ import fr.eni.enchere.bo.Utilisateur;
  */
 @WebServlet(
 		urlPatterns= {
-				"",
+				"/",
 				"/rechercher"
 				
 		})
@@ -80,7 +80,7 @@ public class ServletAccueil extends HttpServlet {
 		
 		//1ere connection sans cookie
 			
-		if (request.getServletPath().equals("")) { 
+		if (request.getServletPath().equals("/")) { 
 			
 			
 			//1er verifie cookie
@@ -88,7 +88,7 @@ public class ServletAccueil extends HttpServlet {
 			int idCookie =0;		
 		
 			//ACCUEIL
-			// si (tableau cookie vide car dossier cookie vidés par user) {
+			// si (tableau cookie vide car dossier cookie vid�s par user) {
 			if (cookies == null) {
 					System.out.println("******condition cookie null*****");
 				//affichage accueil normal
@@ -128,9 +128,9 @@ public class ServletAccueil extends HttpServlet {
 						
 							}//fin boucle FOR
 						
-							//si la liste n'est pas vide, on récupére le seul et 1er cookie	
+							//si la liste n'est pas vide, on r�cup�re le seul et 1er cookie	
 							if (!listeCookies.isEmpty()) {
-							System.out.println("Cookie user trouvé");
+							System.out.println("Cookie user trouv�");
 							
 							
 							cookieUser = listeCookies.get(0);

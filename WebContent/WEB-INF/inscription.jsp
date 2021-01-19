@@ -23,8 +23,7 @@
    	  <div class="profil">
         <div class="row">
            <div class="col-sm-12">
-      							      <!-- /rien pour retour à l'accueil -->
-           <a href="<%=request.getContextPath() %> "><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
+            <a href="<%=request.getContextPath() %>/"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
            </div>
            <h4 style="text-align: center">Créer un compte</h4>
            <div class="row" style="margin-top:20px">
@@ -95,11 +94,10 @@
                       </div>
                       <div class="row">
 	                      <div class="col-sm-6">
-	                      	<a href="<%=request.getContextPath() %>/AccueilSession">
+	                      	<a href="AccueilSession">
 				            <button id="creer" type="submit" class="btn btn-outline-primary btn-lg" style="margin-top: 10px; margin-left: 30%;">Créer</button>
 			            	</a>
-	            										      <!-- /rien pour retour à l'accueil --> 
-				            <a href="<%=request.getContextPath() %> ">
+				            <a href="<%=request.getContextPath() %>/">
 				            <button id="annuler" type="button" class="btn btn-outline-primary btn-lg" style="margin-top: 10px;">Annuler</button>
 			            	</a>
 				          </div>

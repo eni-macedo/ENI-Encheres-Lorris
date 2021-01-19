@@ -20,13 +20,12 @@
     <div class="container" style="margin-top: 20px">
         <div class="row">
              <div class="col-sm-8">
-                <a href="<%=request.getContextPath() %>/AccueilSession "><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
+                <a href="AccueilSession"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
             </div> 
             <div class="col-sm-12" style="text-align: right; margin-bottom: 20px"> 
-                <a href="<%=request.getContextPath() %>#">Enchères</a>
-				<a href="<%=request.getContextPath() %>/VendreUnArticle">Vendre un article</a>
-											      <!-- /rien pour retour à l'accueil -->
-				<a href="<%=request.getContextPath() %>/Connexion">Déconnexion</a> 
+                <a href="Encheres">Enchères</a>
+				<a href="VendreUnArticle">Vendre un article</a>
+				<a href="Connexion">Déconnexion</a> 
             </div>
         	<p>Crédit disponible : ${sessionScope.sessionUtilisateur.credit }</p>
         </div>

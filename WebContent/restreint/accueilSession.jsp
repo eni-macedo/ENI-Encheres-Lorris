@@ -25,16 +25,16 @@
                 <a href="<%=request.getContextPath() %>/AccueilSession"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
            	 </div> 
 	     	 <div class="col-sm-6" style="margin-top: 20px; margin-bottom: 20px"> 
-	         	<a href="<%=request.getContextPath() %>#">Enchères</a>
-			 	<a href="<%=request.getContextPath() %>/VendreUnArticle">Vendre un article</a>
-	       	 	<a href="${pageContext.request.contextPath}/Profil?id=${sessionScope.sessionUtilisateur.noUtilisateur}">Mon profil</a>
-			 	<a href="<%=request.getContextPath() %>/Connexion">Déconnexion</a> 
+            	<a href="Encheres">Enchères</a>
+            	<a href="${pageContext.request.contextPath}/Profil?id=${sessionScope.sessionUtilisateur.noUtilisateur}">Mon profil</a>
+               	<a href="VendreUnArticle">Vendre un article</a>
+               	<a href="Connexion">Se déconnecter</a>
 	         </div>
         </div>
         <p>Bonjour ${sessionScope.sessionUtilisateur.prenom} ${sessionScope.sessionUtilisateur.nom}</p>
        	<p>Crédit disponible : ${sessionScope.sessionUtilisateur.credit }</p>
 		<h2 style="text-align: center;">Liste des enchères</h2>
-		<form action="tri" method ="post">
+		<form action="triSession" method ="post">
         <div class="row">
           <h4 id="filtre">Filtres :</h4>  
           <div class="col-6">
@@ -59,38 +59,43 @@
               </div>
    		  </div>
           <div class="col-sm-6">
-	         <a href="<%=request.getContextPath() %>/AccueilSession">
-	           <button id="creer" type="submit" class="btn btn-outline-primary btn-lg" style="margin-left: 120px; margin-top: 20px;">Rechercher</button>
-	         </a>
+	          <button id="rechercher" type="submit" value="Rechercher" name="rechercher" class="btn btn-outline-primary btn-lg" style="margin-left: 120px; margin-top: 20px;">Rechercher</button>
           </div>
         </div>
 	    <div class="container">  
 	    	<div class="row">
 				<div class="col-sm-3" style="margin-top: 20px;margin-left: 25px">
-					<input type="radio" id="achats" value="achats" name="choix"checked>Achats
+					<label for="achats">Achats</label>
+					<input type="radio" id="achats" value="encheres" name="liste" checked>
 					<br>
-					<input type="checkbox" style="margin-left: 30px" value="encheres ouvertes" checked>enchères ouvertes
+					<label for="enchereOuverte">Encheres ouvertes</label> 
+					<input type="radio" style="margin-left: 30px" id="enchereOuverte"  name="achatEnchere" value="ouverte" checked>
 					<br>
-					<input type="checkbox" style="margin-left: 30px" value="mes encheres en cours">mes enchères en cours
+					<label for="enchereEnCours">Encheres en cours</label>                        
+					<input type="radio" style="margin-left: 30px" id="enchereEnCours" name="achatEnchere" value="enchereEnCours">
 					<br>
-					<input type="checkbox" style="margin-left: 30px" value="mes encheres remportées">mes enchères remportées
+					<label for="enchereRemporte">Encheres remportées</label>
+					<input type="radio" style="margin-left: 30px" id="enchereOuverte" name="achatEnchere" value="remportees">
 				</div>
 				<br>
 				<div class="col-sm-4" style="margin-top: 20px;margin-left: 20px">
-					<input type="radio" value="ventes" name="choix" >Mes ventes
+					<label for="ventes">Ventes</label>
+					<input type="radio" id="ventes" value="ventes" name="liste" >
 					<br>
-					<input type="checkbox" style="margin-left: 30px" value="mes ventes en cours">mes ventes en cours
+					<label for="venteEnCours">Ventes en cours</label>
+					<input type="radio" style="margin-left: 30px" id="ventesEnCours" name="achatEnchere" value="ventesEnCours">
 					<br>
-					<input type="checkbox" style="margin-left: 30px" value="ventes non débutées">ventes non débutées
+					<label for="ventesNonDebutees">Ventes non débutées</label>
+					<input type="radio" style="margin-left: 30px" id="ventesNonDebutees" name="achatEnchere" value="nonDebutees">
 					<br>
-					<input type="checkbox" style="margin-left: 30px" value="ventes terminées">ventes terminées
+					<label for="ventesTerminées">Ventes terminées</label>
+					<input type="radio" style="margin-left: 30px"id="ventesTerminees" name="achatEnchere" value="terminees">
 				</div>
 			</div>
 		</div>
-    	<br>
+	</form>
+    <br>
     	
-    	
-    	<!-- A VOIR -->
     	<p style="text-align: center;"> Il y a ${listeArticles.size()} objets en vente</p>
     
         <div class="col-md-6">
@@ -122,7 +127,6 @@
 		<c:set var="i" value="${i +1 }"/>
 		</c:forEach>
         </div>
-    	</form>
     	
 		<footer>
 			<div class="barblanc"><img id="logo-eni" src="./images/logo-eni.png" alt="photo ici"></div>

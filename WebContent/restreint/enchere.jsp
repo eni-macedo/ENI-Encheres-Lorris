@@ -17,8 +17,7 @@
 </head>
 <body>
 			<div class="col-sm-8">
-             								        <!-- /rien pour retour à l'accueil -->
-                <a href="<%=request.getContextPath() %> " ><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
+            <a href="<%=request.getContextPath() %>/AccueilSession" ><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
                 
             </div> 
 <!--  Pour transformer la valeur FLOAT en INT -->

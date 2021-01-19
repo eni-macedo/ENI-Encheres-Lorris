@@ -21,12 +21,11 @@
     <div class="container">
         <div class="row">
              <div class="col-sm-8">
-             								        <!-- /rien pour retour à l'accueil -->
-                <a href="<%=request.getContextPath() %> " ><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
+                <a href="<%=request.getContextPath() %>/"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
             </div> 
             <div class="col-sm-4" style="margin-top: 20px; margin-bottom: 20px"> 
-                <a href="<%=request.getContextPath() %>/Ajout">Créer un compte -</a>
-				<a href="<%=request.getContextPath() %>/Connexion">Se connecter</a> 
+                <a href="Ajout">Créer un compte -</a>
+				<a href="Connexion">Se connecter</a> 
             </div>
         </div>
      	<h2 style="text-align: center">Liste des enchères</h2> 
@@ -49,14 +48,14 @@
                         <option value="0">Toutes</option>
                         <c:forEach var="cat" items="${listeCategories}">
 						<c:set var="idCat" value="${cat.idCategorie }"/>
-						<option value ="<c:out value="${cat.idCategorie}" />">${cat.libelle}</a> </option>
+						<option value ="<c:out value="${cat.idCategorie}" />">${cat.libelle} </option>
 						</c:forEach>
                       </select>
                   </div>
               </div>
 	        </div>
 	        <div class="col-sm-6">
-	            <button id="rechercher" type="submit" class="btn btn-outline-primary btn-lg" style="margin-left: 120px; margin-top: 20px;">Rechercher</button>
+	            <button id="rechercher" name="rechercher" type="submit" class="btn btn-outline-primary btn-lg" style="margin-left: 120px; margin-top: 20px;">Rechercher</button>
 	        </div>
 	        </form> 
          </div>

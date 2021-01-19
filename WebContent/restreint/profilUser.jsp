@@ -21,13 +21,13 @@
     <div class="container">
         <div class="row">
              <div class="col-sm-6">
-                <a href="<%=request.getContextPath() %>/AccueilSession"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
+                <a href="AccueilSession"><img id="logo-encheres" src="./images/logo-eni-encheres.png" alt="photo ici"></a>
            	 </div> 
 	     	 <div class="col-sm-6" style="margin-top: 20px; margin-bottom: 20px"> 
-	         	<a href="<%=request.getContextPath() %>#">Enchères</a>
-			 	<a href="<%=request.getContextPath() %>/VendreUnArticle">Vendre un article</a>
+	         	<a href="Encheres">Enchères</a>
+			 	<a href="VendreUnArticle">Vendre un article</a>
 	       	 	<a href="${pageContext.request.contextPath}/Profil?id=${sessionScope.sessionUtilisateur.noUtilisateur}">Mon profil</a>
-			 	<a href="<%=request.getContextPath() %>/Connexion">Déconnexion</a> 
+			 	<a href="Connexion">Déconnexion</a> 
 	         </div>
         </div>
     	<h4 style="text-align: center">Profil du vendeur</h4>
@@ -44,7 +44,7 @@
 	   		</div>
 	   		<br>
 	   		<div class="d-grid gap-2 col-6 mx-auto" style="justify-content:center;">		
-				<a href="<%=request.getContextPath() %>/AccueilSession">
+				<a href="AccueilSession">
 				<button id="retour" type="button" class="btn btn-outline-primary btn-lg">Retour</button>
 				</a>  
 			</div>
